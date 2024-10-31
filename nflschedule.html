@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NFL Schedule</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a href="index.html" class="logo">Global.</a>
+      <div class="menu-toggle"><i class="bx bx-menu"></i></div>
+      <nav class="navbar">
+        <a href="index.html" class="active">Home</a>
+        <a href="#">About</a>
+        <a href="nflschedule.html">Schedule</a>
+        <a href="#">Contact</a>
+      </nav>
+    </header>
+    <div class="container">
+      <h1>NFL Schedule</h1>
+      <table id="schedule-table">
+        <thead>
+          <tr>
+            <th>Game Date</th>
+            <th>Game Day</th>
+            <th>Home Team</th>
+            <th>Away Team</th>
+            <th>Game Time</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data will be inserted here by JavaScript -->
+        </tbody>
+      </table>
+
+      <script>
+        // Fetch data from the API and populate the table
+        async function fetchSchedule() {
+          try {
+            const response = await fetch(
+              "https://scheduleapi-815749156854.us-east1.run.app/api/schedule"
+            );
+            const schedule = await response.json();
+
+            const tableBody = document.querySelector("#schedule-table tbody");
+            tableBody.innerHTML = ""; // Clear any existing rows
+
+            schedule.forEach((game) => {
+              const gameDate = new Date(`${game.game_date}T${game.game_time}`); // Create a date object with no timezone specified
+
+              // Determine if the date is in DST for Eastern Time
+              const isDST = (date) => {
+                const january = new Date(date.getFullYear(), 0, 1); // January 1st
+                const july = new Date(date.getFullYear(), 6, 1); // July 1st
+                const standardOffset = Math.max(
+                  january.getTimezoneOffset(),
+                  july.getTimezoneOffset()
+                );
+                return date.getTimezoneOffset() < standardOffset; // If offset is less, it's DST
+              };
+
+              // Use the appropriate offset based on whether it's in DST
+              const offset = isDST(gameDate) ? "-04:00" : "-05:00"; // EDT or EST
+              const easternTimeStr = `${game.game_date}T${game.game_time}${offset}`; // Use dynamic offset
+              const easternTime = new Date(easternTimeStr); // Convert to Eastern Time
+
+              // Convert to the user's local timezone
+              const localTime = easternTime.toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+                timeZoneName: "short",
+              });
+
+              const row = document.createElement("tr");
+              row.innerHTML = `
+            <td>${game.game_date}</td>
+            <td>${game.game_day}</td>
+            <td>${game.home_team}</td>
+            <td>${game.away_team}</td>
+            <td>${localTime}</td> <!-- Display converted time -->
+            <td>${game.location}</td>
+        `;
+              tableBody.appendChild(row);
+            });
+          } catch (error) {
+            console.error("Error fetching schedule:", error);
+          }
+        }
+      </script>
+    </div>
+  </body>
+</html>
