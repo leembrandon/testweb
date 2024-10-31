@@ -88,11 +88,37 @@ th {
 }
 
 td {
-    background-color: #333; /* Slightly lighter dark gray for table cells */
-    color: white; /* White text for cells */
+    background-color: #f2f2f2;
+    
 }
 
-/* Optional: Hover effect for table rows */
 tr:hover {
-    background-color: #555; /* Lighter gray when hovering over rows */
+    background-color: #555;
+}
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+@media (max-width: 480px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    th {
+        display: none; /* Hide table headers on mobile */
+    }
+
+    td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    td:before {
+        content: attr(data-label); /* Use data-label to create labels */
+        font-weight: bold;
+        flex-basis: 50%;
+    }
 }
