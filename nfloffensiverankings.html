@@ -52,13 +52,33 @@
 
               rankings.forEach((team) => {
                 const row = document.createElement("tr");
+                row.className = "rank-row";
                 row.innerHTML = `
                   <td data-label="Rank">${team.rank}</td>
                   <td data-label="Team">${team.team}</td>
                   <td data-label="Points per Game">${team.ppg}</td>
                   <td data-label="Touchdowns">${team.touchdowns}</td>
                 `;
+
+                // Create a collapsible row for mobile
+          const collapsibleRow = document.createElement("tr");
+          collapsibleRow.className = "collapsible-content";
+          collapsibleRow.innerHTML = `
+            <td colspan="4">
+              <strong>Team:</strong> ${team.team}<br>
+              <strong>Points Per Game:</strong> ${team.ppg}<br>
+              <strong>Touchdowns:</strong> ${team.touchdowns}
+            </td>
+          `;
+
+          // Add event listener to toggle collapsible row on mobile only
+          if (window.innerWidth <= 480) {  // Mobile breakpoint
+            row.addEventListener("click", () => {
+              collapsibleRow.style.display = collapsibleRow.style.display === "table-row" ? "none" : "table-row";
+            });
+          }
                 tableBody.appendChild(row);
+                tableBody.appendChild(collapsibleRow);
               });
             } catch (error) {
               console.error("Error fetching offensive rankings:", error);
