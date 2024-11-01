@@ -122,3 +122,15 @@ tr:hover {
         flex-basis: 50%;
     }
 }
+
+/* Hide the collapsible rows on mobile by default */
+    .collapsible-content {
+      display: none;
+    }
+
+    /* Show the collapsible rows on desktop */
+    @media (min-width: 769px) {
+      .collapsible-content {
+        display: table-row;
+      }
+    }
