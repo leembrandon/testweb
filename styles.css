@@ -125,7 +125,7 @@ tr:hover {
 
 /* Hide the collapsible rows on mobile by default */
     .collapsible-content {
-      display: none;
+       display: none !important;
     }
 
     /* Show the collapsible rows on desktop */
