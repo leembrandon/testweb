@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NFL Offensive Rankings</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a href="index.html" class="logo">Global.</a>
+      <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="#">About</a>
+        <a href="nflschedule.html">Schedule</a>
+        <a href="nfloffensiverankings.html" class="active"
+          >Offensive Rankings</a
+        >
+        <a href="#">Contact</a>
+      </nav>
+    </header>
+    <div class="container">
+      <div class="table-container">
+        <h1>NFL Offensive Rankings</h1>
+        <table id="offensive-rankings-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Team</th>
+              <th>Points per Game</th>
+              <th>Touchdowns</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be inserted here by JavaScript -->
+          </tbody>
+        </table>
+
+        <script>
+          // Fetch data from the API and populate the table
+          async function fetchOffensiveRankings() {
+            try {
+              const response = await fetch(
+                "https://scheduleapi-815749156854.us-east1.run.app/api/offensive-rankings"
+              );
+              const rankings = await response.json();
+
+              const tableBody = document.querySelector(
+                "#offensive-rankings-table tbody"
+              );
+              tableBody.innerHTML = ""; // Clear any existing rows
+
+              rankings.forEach((team) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                  <td data-label="Rank">${team.rank}</td>
+                  <td data-label="Team">${team.team}</td>
+                  <td data-label="Points per Game">${team.ppg}</td>
+                  <td data-label="Touchdowns">${team.touchdowns}</td>
+                `;
+                tableBody.appendChild(row);
+              });
+            } catch (error) {
+              console.error("Error fetching offensive rankings:", error);
+            }
+          }
+          // Fetch the offensive rankings when the page loads
+          window.onload = fetchOffensiveRankings;
+        </script>
+      </div>
+    </div>
+  </body>
+</html>
