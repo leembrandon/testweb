@@ -63,6 +63,7 @@
                 // Create a collapsible row for mobile
           const collapsibleRow = document.createElement("tr");
           collapsibleRow.className = "collapsible-content";
+          collapsibleRow.style.display = "none";
           collapsibleRow.innerHTML = `
             <td colspan="4">
               <strong>Team:</strong> ${team.team}<br>
